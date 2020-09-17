@@ -21,4 +21,10 @@ public class MyController {
     public String plus(int a, int b){
         return "Suma de " + a + " + " + b + " = " + myService.plus(a,b);
     }
+
+    @RequestMapping(path = "/create")
+    @ResponseBody
+    public Persona createPerson(String name){
+        return myService.create(name);
+    }
 }
