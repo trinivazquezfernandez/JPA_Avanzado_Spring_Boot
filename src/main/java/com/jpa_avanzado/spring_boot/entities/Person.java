@@ -1,4 +1,4 @@
-package com.jpa_avanzado.spring_boot;
+package com.jpa_avanzado.spring_boot.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

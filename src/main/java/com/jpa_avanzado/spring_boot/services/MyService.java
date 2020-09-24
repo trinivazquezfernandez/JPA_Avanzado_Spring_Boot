@@ -1,5 +1,6 @@
-package com.jpa_avanzado.spring_boot;
+package com.jpa_avanzado.spring_boot.services;
 
+import com.jpa_avanzado.spring_boot.entities.Person;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

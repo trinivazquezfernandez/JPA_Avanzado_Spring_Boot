@@ -1,4 +1,6 @@
 package com.jpa_avanzado.spring_boot;
+import com.jpa_avanzado.spring_boot.entities.Person;
+import com.jpa_avanzado.spring_boot.services.MyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
