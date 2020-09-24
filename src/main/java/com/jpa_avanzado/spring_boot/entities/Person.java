@@ -1,9 +1,6 @@
 package com.jpa_avanzado.spring_boot.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Person {
@@ -18,6 +15,7 @@ public class Person {
         this.id = id;
     }
 
+    @Column(unique = true)
     private String name;
     public String getName() {
         return name;
@@ -32,5 +30,13 @@ public class Person {
     }
     public void setCity(String city) {
         this.city = city;
+    }
+
+    private int queries;
+    public int getQueries() {
+        return queries;
+    }
+    public void setQueries(int queries) {
+        this.queries = queries;
     }
 }

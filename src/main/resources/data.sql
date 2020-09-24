@@ -1,1 +1,1 @@
-insert into person(name) values ('Trini');
+insert into person(name, queries) values ('Trini', 0);

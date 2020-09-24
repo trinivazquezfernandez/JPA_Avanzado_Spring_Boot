@@ -1,19 +1,26 @@
 package com.jpa_avanzado.spring_boot;
+import com.jpa_avanzado.spring_boot.entities.Audit;
 import com.jpa_avanzado.spring_boot.entities.Person;
-import com.jpa_avanzado.spring_boot.services.MyService;
+import com.jpa_avanzado.spring_boot.services.AuditService;
+import com.jpa_avanzado.spring_boot.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.List;
+
 @Controller
 public class MyController {
 
     @Autowired
-    private MyService myService;
+    private PersonService personService;
 
-    @Value("{spring.jpa.open-in.view}")
+    @Autowired
+    private AuditService auditService;
+
+    @Value("{spring.jpa.open-in-view}")
     private String openInView;
 
     @RequestMapping(path = "/hello")
@@ -25,33 +32,35 @@ public class MyController {
     @RequestMapping(path = "/plus")
     @ResponseBody
     public String plus(int a, int b){
-        return "Suma de " + a + " + " + b + " = " + myService.plus(a,b);
+        return "Suma de " + a + " + " + b + " = " + personService.plus(a,b);
     }
 
     @RequestMapping(path = "/createPerson")
     @ResponseBody
     public Person createPerson(String name, String city){
-        return myService.create(name, city);
+        return personService.create(name, city);
     }
 
     @RequestMapping(path = "/getPersonById")
     @ResponseBody
-    public boolean getPerson(long id){
+    public Person getPerson(long id){
         log();
-        Person person1 = myService.getPersonById(id);
-        Person person2 = myService.getPersonById(id);
-
-        //Si spring.jpa.open-in-view vale true, devuelve true (el EntityManager se mantiene en ambas peticiones al servicio)
-        //Si spring.jpa.open-in-view vale false, devuelve false (el EntityManager se crea y se destruye en cada transacción)
-        return person1 == person2;
+        return personService.getPersonById(id);
     }
 
     @RequestMapping(path = "/editPerson")
     @ResponseBody
     public String editPerson(long id, String name){
         log();
-        myService.edit(id, name);
-        return myService.getPersonById(id).getName();
+        personService.edit(id, name);
+        return personService.getPersonById(id).getName();
+    }
+
+    @RequestMapping(path = "/logs")
+    @ResponseBody
+    public List<Audit> logs(){
+        log();
+        return auditService.getAll();
     }
 
     private void log(){
