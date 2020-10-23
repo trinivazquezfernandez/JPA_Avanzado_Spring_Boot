@@ -22,6 +22,7 @@ public class MyController {
     @Autowired
     private AuditService auditService;
 
+
     @Value("{spring.jpa.open-in-view}")
     private String openInView;
 
@@ -74,6 +75,21 @@ public class MyController {
         log();
         return auditService.getAll();
     }
+
+    @RequestMapping(path = "/antecedentes")
+    @ResponseBody
+    public String criminalRecord(long id){
+        String result = personService.getCriminalRecord(id);
+        return result;
+    }
+
+    @RequestMapping(path = "/name")
+    @ResponseBody
+    public String getName(long id){
+        String result = personService.getName(id);
+        return result;
+    }
+
 
     private void log(){
         System.out.println("------ usando: spring.jpa.open-in-view="+ openInView);
