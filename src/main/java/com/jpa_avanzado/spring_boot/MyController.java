@@ -2,7 +2,9 @@ package com.jpa_avanzado.spring_boot;
 import com.jpa_avanzado.spring_boot.entities.Audit;
 import com.jpa_avanzado.spring_boot.entities.Person;
 import com.jpa_avanzado.spring_boot.services.AuditService;
+import com.jpa_avanzado.spring_boot.services.MyService;
 import com.jpa_avanzado.spring_boot.services.PersonService;
+import com.jpa_avanzado.spring_boot.services.WebService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Controller
@@ -21,6 +24,11 @@ public class MyController {
 
     @Autowired
     private AuditService auditService;
+
+    @Autowired
+    private MyService myService;
+
+    @Autowired WebService webService;
 
 
     @Value("{spring.jpa.open-in-view}")
@@ -79,15 +87,15 @@ public class MyController {
     @RequestMapping(path = "/antecedentes")
     @ResponseBody
     public String criminalRecord(long id){
-        String result = personService.getCriminalRecord(id);
+        Person person = myService.getPerson(id);
+        String result = webService.criminalRecord(person);
         return result;
     }
 
     @RequestMapping(path = "/name")
     @ResponseBody
     public String getName(long id){
-        String result = personService.getName(id);
-        return result;
+        return myService.getPerson(id).getName();
     }
 
 

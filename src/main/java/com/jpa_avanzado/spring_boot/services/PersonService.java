@@ -26,6 +26,9 @@ public class PersonService {
     @Autowired
     private WebService webService;
 
+    @Autowired
+    private MyService myService;
+
     public void init(){
         System.out.println("---- Inicializando BBDD ----");
         for (int i=0; i < MILES * 1000; i++){
@@ -95,13 +98,13 @@ public class PersonService {
 
 
     public String getCriminalRecord(long id){
-        Person person = em.find(Person.class, id);
+        Person person = myService.getPerson(id);
         String info = webService.criminalRecord(person);
         return info;
     }
 
     public String getName(long id){
-        Person person = em.find(Person.class, id);
+        Person person = myService.getPerson(id);
         return person.getName();
     }
 }
