@@ -6,9 +6,11 @@ import com.jpa_avanzado.spring_boot.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Controller
@@ -22,6 +24,11 @@ public class MyController {
 
     @Value("{spring.jpa.open-in-view}")
     private String openInView;
+
+    @PostConstruct
+    public void init(){
+        personService.init();
+    }
 
     @RequestMapping(path = "/hello")
     @ResponseBody
@@ -41,11 +48,16 @@ public class MyController {
         return personService.create(name, city);
     }
 
-    @RequestMapping(path = "/getPersonById")
+    @RequestMapping(path = "/getAll")
     @ResponseBody
-    public Person getPerson(long id){
+    public int getAll(){
+        StopWatch sp = new StopWatch();
+        sp.start("consulta");
         log();
-        return personService.getPersonById(id);
+        int name = personService.getAll().size();
+        sp.stop();
+        System.out.println(sp.prettyPrint());
+        return name;
     }
 
     @RequestMapping(path = "/editPerson")

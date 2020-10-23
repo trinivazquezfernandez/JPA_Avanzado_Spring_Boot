@@ -7,6 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -15,8 +18,22 @@ public class PersonService {
     @PersistenceContext
     private EntityManager em;
 
+    private static final int MILES = 150;
+
     @Autowired
     private AuditService auditService;
+
+    public void init(){
+        System.out.println("---- Inicializando BBDD ----");
+        for (int i=0; i < MILES * 1000; i++){
+            Person person = new Person();
+            person.setName("person "+ i);
+
+            em.persist(person);
+        }
+
+        System.out.println("---- Inicialización completada ----");
+    }
 
     public int plus(int a, int b){
         return a + b;
@@ -55,5 +72,19 @@ public class PersonService {
         person.setName(name);
 
         auditService.log("Modificado " + oldName + " por " + name);
+    }
+
+    public List<Person> getAll(){
+        List<Person> people = new ArrayList<Person>(MILES*1000);
+        TypedQuery<Person> query = em.createQuery("Select p from Person p where p.id >= :start and p.id <= :end", Person.class);
+
+        for(int i = 0; i < MILES; i++){
+            query.setParameter("start", (i * 1000L) + 1);
+            query.setParameter("end", (i+1)*1000L);
+
+            people.addAll(query.getResultList());
+        }
+
+        return people;
     }
 }
