@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)//deshabilita el flush automático
 public class PersonService {
 
     @PersistenceContext
@@ -51,7 +51,7 @@ public class PersonService {
     }
 
     public Person getPersonById(long id){
-        //getReference devuelve el objeto solo si está en el presistence constext, no busca en base de datos
+        //getReference devuelve el objeto solo si está en el presistence context, no busca en base de datos
         //return em.getReference(Person.class, id);
 
         //find busca el objeto en base de datos solo si previamente no lo encuentra en el persistence context
@@ -79,10 +79,12 @@ public class PersonService {
         TypedQuery<Person> query = em.createQuery("Select p from Person p where p.id >= :start and p.id <= :end", Person.class);
 
         for(int i = 0; i < MILES; i++){
+
             query.setParameter("start", (i * 1000L) + 1);
             query.setParameter("end", (i+1)*1000L);
 
             people.addAll(query.getResultList());
+            //em.clear();Esta clausula puede sustituir al readonly=true y el resultado en performance es equivalente
         }
 
         return people;
